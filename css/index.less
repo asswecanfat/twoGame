@@ -1,0 +1,151 @@
+@import url("init.less");
+
+.playerBox() {
+  w: 40vw;
+  h: 40vh;
+  fs: 50px;
+}
+
+.btnBox() {
+  w: 20vw;
+  h: 10vh;
+  fs: 25px;
+}
+
+.game-box {
+  display: flex;
+  position: relative;
+  border-radius: (.playerBox() [h] / 20);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+
+  .player-active {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .player1,
+  .player2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: .playerBox() [w];
+    height: .playerBox() [h] * 1.5;
+    // background-color: aliceblue;
+
+    .plyerInfo {
+      h1 {
+        font-weight: 500;
+        margin-bottom: (.playerBox() [h] / 10);
+        // color: #ccc;
+      }
+      p {
+        text-align: center;
+        font-size: .playerBox() [fs];
+        color: #6495ed;
+      }
+    }
+
+    .current {
+      width: .btnBox() [w];
+      height: .btnBox() [h];
+      text-align: center;
+      background: #6495ed;
+      color: aliceblue;
+      border-radius: (.btnBox() [h] / 15);
+
+      h4 {
+        margin: (.btnBox() [h] / 10) 0 (.btnBox() [h] / 8);
+        font-size: (.btnBox() [fs] / 1.5);
+      }
+
+      p {
+        font-size: .btnBox() [fs];
+      }
+    }
+  }
+
+  @diceNum: range(6);
+  .OBox() {
+    w: 10vw;
+    op-top: 1vh;
+    btnfs: 16px;
+    sn-bottom: 1vh;
+    rd-top: 1vh;
+    rd-bottom: 1vh;
+  }
+
+  .operator {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: .OBox() [op-top];
+    left: 50%;
+    transform: translateX(-50%);
+
+    .startNew {
+      width: .OBox() [w] * 1.4;
+      padding: (.OBox() [w] / 10);
+      margin-bottom: .OBox() [sn-bottom];
+    }
+
+    .rollDice {
+      width: .OBox() [w] * 1.2;
+      margin-top: .OBox() [rd-top];
+      margin-bottom: .OBox() [rd-bottom];
+      // padding: (.OBox() [w] / 15);
+    }
+
+    .hole {
+      width: .OBox() [w] * 1.1;
+    }
+
+    .btnCommon {
+      height: (.OBox() [w] / 2.5);
+      border-radius: (.OBox() [w] / 5);
+      font-size: .OBox() [btnfs];
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0px 0px 10px black;
+
+      &:active {
+        transform: translateY(3px);
+      }
+    }
+
+    .hidden {
+      opacity: 0;
+    }
+
+    .diceBox {
+      position: relative;
+      width: (.OBox() [w] / 1.2);
+      height: (.OBox() [w] / 1.2);
+      box-shadow: 0px 0px 10px black;
+
+      each(
+        @diceNum, .(@v) {
+          .dice-@{v} {
+            position: absolute;
+            display: grid;
+            grid-template-rows: repeat(3, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+            width: 100%;
+            height: 100%;
+            // z-index: @v;
+            background: aliceblue;
+      
+            .point {
+              width: (.OBox() [w] / 5);
+              height: (.OBox() [w] / 5);
+              align-self: center;
+              justify-self: center;
+              background-color: red;
+              border-radius: (.OBox() [w] / 5);
+            }
+          }
+        }
+      );
+    }
+  }
+}
