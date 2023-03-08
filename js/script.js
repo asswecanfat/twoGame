@@ -1,11 +1,12 @@
 // player对象生成器
-function getPlayer(id, score, nowScore) {
+function getPlayer(id, score, nowScore, win) {
   return {
     playerID: id,
     score: score,
     haveScore: 0,
     nowScore: nowScore,
     haveNowScore: 0,
+    win: win,
 
     activeSwitch: function () {
       this.playerID.classList.toggle("player-active");
@@ -27,24 +28,40 @@ function getPlayer(id, score, nowScore) {
     resetNowScore: function () {
       this.addNowScore(-1 * this.haveNowScore);
     },
+
+    winShow: function () {
+      this.win.style.animation = "winAnimeta 0.3s linear forwards";
+    },
+
+    winReset: function () {
+      this.win.style.animation = "";
+    },
   };
 }
+
+const startNew = document.querySelector(".startNew");
+const rollDice = document.querySelector(".rollDice");
+const hole = document.querySelector(".hole");
+const dice = document.querySelector(".diceBox");
+const diceFace = document.querySelectorAll(".diceBox > div");
 
 const player1 = getPlayer(
   document.querySelector(".player1"),
   document.getElementById("score1"),
-  document.getElementById("nowScore1")
+  document.getElementById("nowScore1"),
+  document.querySelector(".win1")
 );
 
 const player2 = getPlayer(
   document.querySelector(".player2"),
   document.getElementById("score2"),
-  document.getElementById("nowScore2")
+  document.getElementById("nowScore2"),
+  document.querySelector(".win2")
 );
-
 const playGround = {
   player: [player1, player2],
   activeIndex: 0,
+  maxScore: 5,
 
   exchangeActive: function () {
     this.getActivePlayer().activeSwitch();
@@ -62,6 +79,7 @@ const playGround = {
       // this.player[i].haveScore = this.player[i].haveNowScore = 0;
       this.player[i].resetNowScore();
       this.player[i].resetScore();
+      this.player[i].winReset();
     }
 
     if (this.activeIndex === 1) {
@@ -69,13 +87,18 @@ const playGround = {
       this.exchangeActive();
     }
   },
+  whoWin: function () {
+    const overflow = (player) => {
+      if (player.haveScore > this.maxScore) {
+        player.winShow();
+        return true;
+      }
+      return false;
+    };
+    console.log(overflow(this.player[0]) || overflow(this.player[1]));
+    return overflow(this.player[0]) || overflow(this.player[1]);
+  },
 };
-
-const startNew = document.querySelector(".startNew");
-const rollDice = document.querySelector(".rollDice");
-const hole = document.querySelector(".hole");
-const dice = document.querySelector(".diceBox");
-const diceFace = document.querySelectorAll(".diceBox > div");
 
 const reNewGame = () => {
   playGround.resetPlayerData();
@@ -107,7 +130,7 @@ const getDice = () => {
 const addS = () => {
   const player = playGround.getActivePlayer();
   player.addScore(player.haveNowScore);
-  playGround.exchangeActive();
+  if (!playGround.whoWin()) playGround.exchangeActive();
 };
 
 startNew.addEventListener("click", reNewGame);

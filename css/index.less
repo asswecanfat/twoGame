@@ -19,6 +19,41 @@
   overflow: hidden;
   background: rgba(0, 0, 0, 0.4);
 
+  .win1,
+  .win2 {
+    display: block;
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: .playerBox() [h] * 1.5;
+    line-height: .playerBox() [h] * 1.5;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 3;
+    font-size: 0;
+  }
+
+  @keyframes winAnimeta {
+    from {
+      width: 0;
+      font-size: 0;
+    }
+    to {
+      width: .playerBox() [w] * 2;
+      font-size: 8vw;
+    }
+  }
+
+  .win1 {
+    left: 0;
+    // animation: winAnimeta 0.3s linear forwards; //;
+  }
+
+  .win2 {
+    right: 0;
+    // animation: attr(after-animate); //winAnimeta 0.3s linear forwards;
+  }
+
   .player-active {
     background: rgba(255, 255, 255, 0.5);
   }
@@ -68,62 +103,62 @@
   @diceNum: range(6);
   .OBox() {
     w: 10vw;
-    op-top: 1vh;
+    btn-h: 1vh;
     btnfs: 16px;
-    sn-bottom: 1vh;
-    rd-top: 1vh;
-    rd-bottom: 1vh;
   }
 
-  .operator {
+  .startNew,
+  .diceBox,
+  .rollDice,
+  .hole {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    top: .OBox() [op-top];
     left: 50%;
     transform: translateX(-50%);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 
-    .startNew {
-      width: .OBox() [w] * 1.4;
-      padding: (.OBox() [w] / 10);
-      margin-bottom: .OBox() [sn-bottom];
+  .startNew {
+    width: .OBox() [w] * 1.4;
+    top: 10%;
+    z-index: 10;
+  }
+
+  .rollDice {
+    top: 69%;
+    width: .OBox() [w] * 1.2;
+  }
+
+  .hole {
+    top: 78%;
+    width: .OBox() [w] * 1.1;
+  }
+
+  .btnCommon {
+    height: .OBox() [btn-h] * 4;
+    line-height: .OBox() [btn-h] * 4;
+    border-radius: (.OBox() [btn-h] * 2);
+    font-size: .OBox() [btnfs];
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0px 0px 10px black;
+
+    &:active {
+      transform: translate(-50%, 3px);
     }
+  }
 
-    .rollDice {
-      width: .OBox() [w] * 1.2;
-      margin-top: .OBox() [rd-top];
-      margin-bottom: .OBox() [rd-bottom];
-      // padding: (.OBox() [w] / 15);
-    }
+  .hidden {
+    opacity: 0;
+  }
 
-    .hole {
-      width: .OBox() [w] * 1.1;
-    }
+  .diceBox {
+    top: 20%;
+    width: (.OBox() [w] / 1.2);
+    height: (.OBox() [w] / 1.2);
+    box-shadow: 0px 0px 10px black;
 
-    .btnCommon {
-      height: (.OBox() [w] / 2.5);
-      border-radius: (.OBox() [w] / 5);
-      font-size: .OBox() [btnfs];
-      background: rgba(255, 255, 255, 0.6);
-      box-shadow: 0px 0px 10px black;
-
-      &:active {
-        transform: translateY(3px);
-      }
-    }
-
-    .hidden {
-      opacity: 0;
-    }
-
-    .diceBox {
-      position: relative;
-      width: (.OBox() [w] / 1.2);
-      height: (.OBox() [w] / 1.2);
-      box-shadow: 0px 0px 10px black;
-
-      each(
+    each(
         @diceNum, .(@v) {
           .dice-@{v} {
             position: absolute;
@@ -146,6 +181,5 @@
           }
         }
       );
-    }
   }
 }
